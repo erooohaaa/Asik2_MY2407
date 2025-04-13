@@ -2,21 +2,32 @@ package collections;
 
 import java.util.Iterator;
 
+/**
+ * Resizable array implementation of the MyList interface.
+ * Supports dynamic resizing and provides O(1) amortized time for add/remove operations at the end.
+ *
+ * @param <T> the type of elements in this list
+ */
 public class MyArrayList<T> implements MyList<T> {
-    private Object[] data;
-    private int size;
+    private Object[] data; // Internal array to store elements
+    private int size;      // Current number of elements
 
+    /**
+     * Constructs an empty list with an initial capacity of 10.
+     */
     public MyArrayList() {
         data = new Object[10];
         size = 0;
     }
 
+    /**
+     * Ensures the internal array has sufficient capacity.
+     * Doubles the array size if full.
+     */
     private void ensureCapacity() {
         if (size >= data.length) {
             Object[] newData = new Object[data.length * 2];
-            for (int i = 0; i < size; i++) {
-                newData[i] = data[i];
-            }
+            System.arraycopy(data, 0, newData, 0, size);
             data = newData;
         }
     }

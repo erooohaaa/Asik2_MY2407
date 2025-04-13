@@ -2,21 +2,30 @@ package collections;
 
 import java.util.Iterator;
 
+/**
+ * Doubly-linked list implementation of the MyList interface.
+ * Provides O(1) time complexity for add/remove operations at head/tail.
+ *
+ * @param <T> the type of elements in this list
+ */
 public class MyLinkedList<T> implements MyList<T> {
-    private class Node {
+    private static class Node<T> {
         T data;
-        Node prev;
-        Node next;
+        Node<T> prev;
+        Node<T> next;
 
         Node(T data) {
             this.data = data;
         }
     }
 
-    private Node head;
-    private Node tail;
-    private int size;
+    private Node<T> head; // First node in the list
+    private Node<T> tail; // Last node in the list
+    private int size;     // Number of elements
 
+    /**
+     * Constructs an empty linked list.
+     */
     public MyLinkedList() {
         head = null;
         tail = null;
@@ -30,7 +39,7 @@ public class MyLinkedList<T> implements MyList<T> {
 
     @Override
     public void addFirst(T item) {
-        Node newNode = new Node(item);
+        Node<T> newNode = new Node<>(item);
         if (head == null) {
             head = tail = newNode;
         } else {
@@ -43,7 +52,7 @@ public class MyLinkedList<T> implements MyList<T> {
 
     @Override
     public void addLast(T item) {
-        Node newNode = new Node(item);
+        Node<T> newNode = new Node<>(item);
         if (tail == null) {
             head = tail = newNode;
         } else {
@@ -62,8 +71,8 @@ public class MyLinkedList<T> implements MyList<T> {
         } else if (index == size) {
             addLast(item);
         } else {
-            Node current = getNode(index);
-            Node newNode = new Node(item);
+            Node<T> current = getNode(index);
+            Node<T> newNode = new Node<>(item);
             newNode.prev = current.prev;
             newNode.next = current;
             current.prev.next = newNode;
@@ -99,7 +108,7 @@ public class MyLinkedList<T> implements MyList<T> {
     @Override
     public void remove(int index) {
         checkElementIndex(index);
-        Node toRemove = getNode(index);
+        Node<T> toRemove = getNode(index);
         unlink(toRemove);
     }
 
@@ -115,13 +124,13 @@ public class MyLinkedList<T> implements MyList<T> {
         unlink(tail);
     }
 
-    private void unlink(Node node) {
-        if (node.prev == null) { // head
+    private void unlink(Node<T> node) {
+        if (node.prev == null) {
             head = node.next;
         } else {
             node.prev.next = node.next;
         }
-        if (node.next == null) { // tail
+        if (node.next == null) {
             tail = node.prev;
         } else {
             node.next.prev = node.prev;
@@ -129,8 +138,8 @@ public class MyLinkedList<T> implements MyList<T> {
         size--;
     }
 
-    private Node getNode(int index) {
-        Node current;
+    private Node<T> getNode(int index) {
+        Node<T> current;
         if (index < size / 2) {
             current = head;
             for (int i = 0; i < index; i++) current = current.next;
@@ -143,7 +152,7 @@ public class MyLinkedList<T> implements MyList<T> {
 
     @Override
     public int indexOf(Object obj) {
-        Node current = head;
+        Node<T> current = head;
         for (int i = 0; current != null; i++) {
             if (current.data.equals(obj)) return i;
             current = current.next;
@@ -153,7 +162,7 @@ public class MyLinkedList<T> implements MyList<T> {
 
     @Override
     public int lastIndexOf(Object obj) {
-        Node current = tail;
+        Node<T> current = tail;
         for (int i = size - 1; current != null; i--) {
             if (current.data.equals(obj)) return i;
             current = current.prev;
@@ -181,7 +190,7 @@ public class MyLinkedList<T> implements MyList<T> {
     @Override
     public Object[] toArray() {
         Object[] result = new Object[size];
-        Node current = head;
+        Node<T> current = head;
         for (int i = 0; i < size; i++) {
             result[i] = current.data;
             current = current.next;
@@ -194,7 +203,7 @@ public class MyLinkedList<T> implements MyList<T> {
         if (size <= 1) return;
 
         for (int i = 0; i < size - 1; i++) {
-            Node current = head;
+            Node<T> current = head;
             for (int j = 0; j < size - 1 - i; j++) {
                 Comparable<T> a = (Comparable<T>) current.data;
                 T b = current.next.data;
@@ -229,7 +238,7 @@ public class MyLinkedList<T> implements MyList<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            private Node current = head;
+            private Node<T> current = head;
 
             @Override
             public boolean hasNext() {
